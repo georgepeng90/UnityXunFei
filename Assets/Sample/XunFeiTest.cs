@@ -31,7 +31,10 @@ public class XunFeiTest : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 		#if !UNITY_EDITOR
 		XunFeiVAInterface.isrResultEvent += ResultCallback;
+		XunFeiVAInterface.isrErrorEvent += ErrorCallback;
 		XunFeiVAInterface.isrVolumeEvent += VolumeCallback;
+		XunFeiVAInterface.isrSpeechBeginEvent += SpeechBeginCallback;
+		XunFeiVAInterface.isrSpeechStopEvent += SpeechStopCallback;
 		XunFeiVAInterface.Init("59bb45ec");
 		yield return new WaitForSeconds(2f);
 		XunFeiVAInterface.ISR_CreateSession();
@@ -42,7 +45,6 @@ public class XunFeiTest : MonoBehaviour
 
 	IEnumerator Record()
 	{
-		_button.gameObject.SetActive(false);
 		_text2.text = "";
 		yield return new WaitForEndOfFrame();
 		#if !UNITY_EDITOR
@@ -50,7 +52,6 @@ public class XunFeiTest : MonoBehaviour
 		yield return new WaitForSeconds(3f);
 		XunFeiVAInterface.ISR_StopRecording();
 		#endif
-		_button.gameObject.SetActive(true);
 	}
 
 	private void ResultCallback(string results, bool isLast)
@@ -58,8 +59,23 @@ public class XunFeiTest : MonoBehaviour
 		_text2.text += results;
 	}
 
+	private void ErrorCallback(int errorCode, int errorType)
+	{
+		
+	}
+
 	private void VolumeCallback(int volume)
 	{
 		_text1.text = volume.ToString();
+	}
+
+	private void SpeechBeginCallback()
+	{
+		_button.gameObject.SetActive(false);
+	}
+
+	private void SpeechStopCallback()
+	{
+		_button.gameObject.SetActive(true);
 	}
 }

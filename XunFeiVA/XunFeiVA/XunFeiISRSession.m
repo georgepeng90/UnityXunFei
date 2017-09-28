@@ -120,7 +120,7 @@ static XunFeiISRSession *instance = nil;
 
 - (void) onVolumeChanged: (int)volume
 {
-    NSLog(@"/n====================音量：%d",volume);
+    NSLog(@"/n====================onVolumeChanged：%d",volume);
     [[XunFeiVAEventDispatcher sharedInstance] sendISRVolumeEventWithVolume:volume];
 }
 
@@ -131,13 +131,14 @@ static XunFeiISRSession *instance = nil;
     {
         self.isBeginOfSpeech = YES;
     }
+    [[XunFeiVAEventDispatcher sharedInstance] sendISRSpeechBeginEvent];
 }
 
 - (void) onEndOfSpeech
 {
     NSLog(@"/n====================onEndOfSpeech");
-    
     [_pcmRecorder stop];
+    [[XunFeiVAEventDispatcher sharedInstance] sendISRSpeechStopEvent];
 }
 
 /**
@@ -148,7 +149,12 @@ static XunFeiISRSession *instance = nil;
  ****/
 - (void)onError:(IFlySpeechError *)errorCode
 {
+    if ([errorCode errorCode] == 0)
+        return;
+    
     NSLog(@"/n====================onError: %@", errorCode);
+    NSLog(@"/nDescription: %@", [errorCode errorDesc]);
+    [[XunFeiVAEventDispatcher sharedInstance] sendISRErrorEventWithCode:[errorCode errorCode] type:[errorCode errorType]];
 }
 
 /**
@@ -158,10 +164,7 @@ static XunFeiISRSession *instance = nil;
  ****/
 - (void)onResults:(NSArray *)results isLast:(BOOL)isLast
 {
-    if (isLast)
-    {
-        NSLog(@"/n====================内容：%@",results);
-    }
+    NSLog(@"/n====================onResults：%@",results);
     [[XunFeiVAEventDispatcher sharedInstance] sendISRResultEventWithResults:results asLast:isLast];
 }
 

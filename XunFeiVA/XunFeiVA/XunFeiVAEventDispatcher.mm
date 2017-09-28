@@ -38,11 +38,35 @@ static XunFeiVAEventDispatcher *instance = nil;
     _isrResultCallback([resultFromJson UTF8String], last);
 }
 
+- (void)sendISRErrorEventWithCode:(int)errorCode type:(int)errorType
+{
+    if (_isrErrorCallback == nil)
+        return;
+    
+    _isrErrorCallback(errorCode, errorType);
+}
+
 - (void)sendISRVolumeEventWithVolume:(int)volume
 {
     if (_isrVolumeCallback == nil)
         return;
     _isrVolumeCallback(volume);
+}
+
+- (void)sendISRSpeechBeginEvent
+{
+    if (_isrSpeechBeginCallback == nil)
+        return;
+    
+    _isrSpeechBeginCallback();
+}
+
+- (void)sendISRSpeechStopEvent
+{
+    if (_isrSpeechStopCallback == nil)
+        return;
+    
+    _isrSpeechStopCallback();
 }
 
 @end

@@ -47,10 +47,16 @@ void XunFeiVA_ISR_StopRecording()
 }
 
 void XunFeiVA_ISR_SetupCallbacks(XUNFEIVA_ISR_RESULT_CALLBACK resultCallback,
-                                 XUNFEIVA_ISR_VOLUME_CALLBACK volumeCallback)
+                                 XUNFEIVA_ISR_ERROR_CALLBACK errorCallback,
+                                 XUNFEIVA_ISR_VOLUME_CALLBACK volumeCallback,
+                                 XUNFEIVA_ISR_SPEECH_BEGIN_CALLBACK speechBeginCallback,
+                                 XUNFEIVA_ISR_SPEECH_STOP_CALLBACK speechStopCallback)
 {
     XunFeiVAEventDispatcher* dispatcher = [XunFeiVAEventDispatcher sharedInstance];
     dispatcher->_isrResultCallback = resultCallback;
+    dispatcher->_isrErrorCallback = errorCallback;
     dispatcher->_isrVolumeCallback = volumeCallback;
+    dispatcher->_isrSpeechBeginCallback = speechBeginCallback;
+    dispatcher->_isrSpeechStopCallback = speechStopCallback;
 }
 
