@@ -24,11 +24,29 @@ namespace XunFeiVA
 
 		#if !UNITY_EDITOR
 
-		[DllImport("__Internal")]
-		private static extern void XunFeiVA_Init(string appid);
-		public static void Init(string appid)
+		public enum LogLevel
 		{
-			XunFeiVA_Init(appid);
+			All = -1,
+			Detail = 31,
+			Normal = 15,
+			Low = 7,
+			None = 0
+		}
+
+		[DllImport("__Internal")]
+		private static extern void XunFeiVA_Init(
+			string appid,
+			int logLevel,
+			bool logOnConsole);
+		public static void Init(
+			string appid, 
+			LogLevel logLevel = LogLevel.All, 
+			bool logOnConsole = true)
+		{
+			XunFeiVA_Init(
+				appid,
+				(int)logLevel,
+				logOnConsole);
 			XunFeiVA_ISR_SetupCallbacks(
 				_ISR_ResultCallback,
 				_ISR_ErrorCallback,

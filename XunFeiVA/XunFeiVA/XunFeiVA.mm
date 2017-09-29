@@ -11,13 +11,13 @@
 #import "XunFeiISRSession.h"
 #import "XunFeiVAEventDispatcher.h"
 
-void XunFeiVA_Init(const char* appid)
+void XunFeiVA_Init(const char* appid, int logLevel, bool logOnConsole)
 {
     //设置sdk的log等级，log保存在下面设置的工作路径中
-    [IFlySetting setLogFile:LVL_ALL];
+    [IFlySetting setLogFile:logLevel];
 
     //打开输出在console的log开关
-    [IFlySetting showLogcat:YES];
+    [IFlySetting showLogcat:logOnConsole];
 
     //设置sdk的工作路径
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
